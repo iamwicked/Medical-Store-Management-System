@@ -6,7 +6,7 @@ import datetime
 import mysql.connector
 
 try:
-	conn = mysql.connector.connect(host="localhost", user="atharv", password="Atharv@2000", database='MedicalStore', auth_plugin='mysql_native_password')
+	conn = mysql.connector.connect(host="localhost", user="username", password="password", database='your_database', auth_plugin='mysql_native_password')
 	print("Connected to MySQL Database")
 except:
 	print("Can't Connect to MySQL Database")
