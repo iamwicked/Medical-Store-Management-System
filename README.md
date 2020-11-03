@@ -16,9 +16,9 @@ Group Members:-
 
 Front-End: HTML, CSS, Javascript, JQuery, Bootstrap
 
-Back-End: Python, Django
+Back-End: Python(3.7.6), Django(3.0.6)
 
-Database: My-SQL
+Database: My-SQL(8.0.21-0ubuntu0.20.04.4)
 
 Used mysql-python-connector to connect with mysql database.
 
