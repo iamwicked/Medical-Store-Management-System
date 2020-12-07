@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# This is my manage.py function
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
