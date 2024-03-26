@@ -79,8 +79,8 @@ def bill_register(request):
 		full_date = str(d.year) + '-' +str(d.month) + '-' + str(d.day)
 		try:
 			for i in range(len(medname)):
-				query = f"select sum(curr_quantity) from medicine natural join stock where med_name='{medname[i]}' group by med_name;"
-				cur.execute(query)
+				query = "select sum(curr_quantity) from medicine natural join stock where med_name=? group by med_name;"
+				cur.execute(query, (medname[i], ))
 				data = cur.fetchone()[0]
 				if data < int(qua[i]):
 					messages.error(request, f"Sorry, Required Quantity Of   \"{medname[i]}\"   Not Available !")
