@@ -124,3 +124,4 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+SESSION_COOKIE_SECURE = True
