@@ -79,8 +79,8 @@ def bill_register(request):
 		full_date = str(d.year) + '-' +str(d.month) + '-' + str(d.day)
 		try:
 			for i in range(len(medname)):
-				query = f"select sum(curr_quantity) from medicine natural join stock where med_name='{medname[i]}' group by med_name;"
-				cur.execute(query)
+				query = "select sum(curr_quantity) from medicine natural join stock where med_name=? group by med_name;"
+				cur.execute(query, (medname[i], ))
 				data = cur.fetchone()[0]
 				if data < int(qua[i]):
 					messages.error(request, f"Sorry, Required Quantity Of   \"{medname[i]}\"   Not Available !")
@@ -102,8 +102,8 @@ def bill_register(request):
 				cur.execute(query)
 				conn.commit()
 				
-				query_2 = f"select * from stock where med_id in (select med_id from medicine where med_name='{medname[i]}') and curr_quantity > 0 order by exp_date;"
-				cur.execute(query_2)
+				query_2 = "select * from stock where med_id in (select med_id from medicine where med_name=?) and curr_quantity > 0 order by exp_date;"
+				cur.execute(query_2, (medname[i], ))
 				records = cur.fetchall()
 				quantities = []
 				item_quantity = int(qua[i])
@@ -148,14 +148,13 @@ def bill_register(request):
 def staff_register(request):
 
 	if request.method == 'POST':
-		name = request.POST['firstname'] + " " + request.POST['lastname']
 		gender = request.POST['gender']
 		age = int(request.POST['age'])
 		salary = int(request.POST['salary'])
 		# Write in database
-		query = f"insert into employee (emp_name, emp_gender, emp_age, emp_salary) values ('{name}','{gender}',{age},{salary});"
+		query = f"insert into employee (emp_name, emp_gender, emp_age, emp_salary) values (?,?,{age},{salary});"
 		try:
-			cur.execute(query)
+			cur.execute(query, ('{0} {1}'.format(request.POST['firstname'], request.POST['lastname']), gender, ))
 			conn.commit()
 		except:
 			messages.error(request,"Some Error Occured !")
@@ -303,10 +302,10 @@ def supplier_register(request):
 		suppliername = request.POST["supname"]
 		city = request.POST["city"]			
 		pincode = request.POST["pincode"]
-		query = f"INSERT INTO supplier (supplier_name, supplier_city, city_pincode) VALUES ('{suppliername}', '{city}', {pincode});"
+		query = f"INSERT INTO supplier (supplier_name, supplier_city, city_pincode) VALUES (?, ?, {pincode});"
 		print(query)
 		try:
-			cur.execute(query)
+			cur.execute(query, (suppliername, city, ))
 			conn.commit()
 			messages.success(request, "Record Saved Successfully !")
 			return redirect('store:supplier-all')
@@ -375,10 +374,10 @@ def medicine_register(request):
 	if request.method=='POST':
 		name = request.POST["medname"]
 		price = request.POST["medprice"]
-		query = f"INSERT INTO medicine (med_name, med_price) VALUES ('{name}', {price});"
+		query = f"INSERT INTO medicine (med_name, med_price) VALUES (?, {price});"
 		print("**\n",query,"**\n")
 		try:
-			cur.execute(query)
+			cur.execute(query, (name, ))
 			conn.commit()
 			messages.success(request, "Record Saved Successfully !")
 			return redirect('store:medicine-all')
